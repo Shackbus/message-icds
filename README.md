@@ -1,4 +1,4 @@
-# Shackbus Interface Control Document
+# Shackbus Message Interface Control Documents
 
 This repository contains the official message definitions for all Shackbus
 messages. The messages are defined in the
@@ -50,13 +50,13 @@ Assuming you have included this repository as a git submodule, you would
 probably have a directory structure similar to this one:
 
 ``` bash
-    your_project -
-                 | - icd //this repository
-                 | - icd_gen //where the generated files will be located
-                 | - build
-                 | - src
-                 | - include
-                 | - ...
+    your_project _
+                 |- icd //this repository
+                 |- icd_gen //where the generated files will be located
+                 |- build
+                 |- src
+                 |- include
+                 |- ...
 ```
 
 Make sure you are in the root directory of your project. The protocol buffers
