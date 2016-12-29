@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package shackbus.audio;
+
+message AudioData{
+    int32 channels = 1; // Audio channels (typically MONO 1 / Stereo 2)
+    int32 frame_length = 2; // Audio frame length (in bytes)
+    int32 sampling_rate = 3; // Audio sampling rate
+    int32 bitrate = 4; // Audio bit rate
+    bytes audio_raw = 7; // Audio packets
+    repeated sint32 audio_packed = 6 [packed=true]; // audio packets
+    Codec codec = 8;
+}
+
+enum Codec {
+    PCM = 0;
+    OPUS = 1;
+}
+
+// message AudioRequest{
+//     optional bool on = 1;
+//     optional string user_id = 2;
+//     optional int32 play_msg = 3;
+//     optional bool cancel_play_msg = 4;
+// }
+
+// message AudioResponse{
+//     optional bool on = 1;
+//     optional STATUS status = 2;
+//     optional string tx_user = 3;
+//     repeated string connected_users = 4;
+//     optional int32 playing_msg = 5;
+//     optional bool cancel_playing_msg = 6;
+// }
+
+// message AudioRecording{
+//     optional string user_id = 1;
+//     optional bytes recording = 2;
+// }
