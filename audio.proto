@@ -6,7 +6,7 @@ message AudioData{
     int32 channels = 1; // Audio channels (typically MONO 1 / Stereo 2)
     int32 frame_length = 2; // Audio frame length (in bytes)
     int32 sampling_rate = 3; // Audio sampling rate
-    int32 bitrate = 4; // Audio bit rate
+    int32 bit_depth = 4; // Audio bit depth (8...16 bit typically)
     bytes audio_raw = 7; // Audio packets
     repeated sint32 audio_packed = 6 [packed=true]; // audio packets
     Codec codec = 8;
