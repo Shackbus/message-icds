@@ -1,41 +1,31 @@
-syntax = "proto3";
+syntax = "proto2";
 
 package shackbus.audio;
 
 message AudioData{
-    int32 channels = 1; // Audio channels (typically MONO 1 / Stereo 2)
-    int32 frame_length = 2; // Audio frame length (in bytes)
-    int32 sampling_rate = 3; // Audio sampling rate
-    int32 bit_depth = 4; // Audio bit depth (8...16 bit typically)
-    bytes audio_raw = 7; // Audio packets
-    repeated sint32 audio_packed = 6 [packed=true]; // audio packets
-    Codec codec = 8;
+    optional Codec codec = 1;
+    optional int32 channels = 2; // Audio channels (typically MONO 1 / Stereo 2)
+    optional int32 frame_length = 3; // Audio frame length (in bytes)
+    optional int32 sampling_rate = 4; // Audio sampling rate
+    optional int32 bit_depth = 5; // Audio bit depth (8...16 bit typically)
+    optional bytes audio_raw = 6; // Audio packets as raw byte arrays
+    repeated sint32 audio_packed = 7 [packed=true]; // audio packets as sint32
 }
 
 enum Codec {
-    PCM = 0;
+    NONE = 0;
     OPUS = 1;
+    PCM = 2;
 }
 
-// test
+message ClientRequest{
+    optional bool rx_audio_on = 1;
+    optional string tx_user_topic = 2;
+}
 
-// message AudioRequest{
-//     optional bool on = 1;
-//     optional string user_id = 2;
-//     optional int32 play_msg = 3;
-//     optional bool cancel_play_msg = 4;
-// }
-
-// message AudioResponse{
-//     optional bool on = 1;
-//     optional STATUS status = 2;
-//     optional string tx_user = 3;
-//     repeated string connected_users = 4;
-//     optional int32 playing_msg = 5;
-//     optional bool cancel_playing_msg = 6;
-// }
-
-// message AudioRecording{
-//     optional string user_id = 1;
-//     optional bytes recording = 2;
-// }
+message ServerResponse{
+    optional bool online = 1;
+    optional int32 last_seen = 2;
+    optional bool rx_audio_on = 3;
+    optional string tx_user_topic = 4;
+}
