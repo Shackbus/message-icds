@@ -10,6 +10,7 @@ message AudioData{
     optional int32 bit_depth = 5; // Audio bit depth (8...16 bit typically)
     optional bytes audio_raw = 6; // Audio packets as raw byte arrays
     repeated sint32 audio_packed = 7 [packed=true]; // audio packets as sint32
+    optional string user_id = 8;
 }
 
 enum Codec {
@@ -19,13 +20,16 @@ enum Codec {
 }
 
 message ClientRequest{
-    optional bool rx_audio_on = 1;
-    optional string tx_user_topic = 2;
+    optional bool audio_stream = 1;
+    optional string ping_origin = 2;
+    optional int64 ping = 3;
 }
 
 message ServerResponse{
     optional bool online = 1;
-    optional int32 last_seen = 2;
-    optional bool rx_audio_on = 3;
-    optional string tx_user_topic = 4;
+    optional int64 last_seen = 2; //unix timestamp
+    optional bool audio_stream = 3;
+    optional string tx_user = 4;
+    optional string ping_origin = 5;
+    optional int64 pong = 6;
 }
