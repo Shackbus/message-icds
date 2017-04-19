@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package shackbus.status;
+
+// indicate if the server is online or offline
+message Status{
+    bool online = 1;
+}

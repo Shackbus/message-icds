@@ -1,15 +1,15 @@
 syntax = "proto3";
 
-package shackbus.error;
+package shackbus.log;
 
-// standard Shackbus Error Message
-message Error{
-    ERROR_LEVEL level = 1;
+// standard Shackbus Log Message
+message LogMsg{
+    LOG_LEVEL level = 1;
     string msg = 2;
     string description = 3;
 }
 
-enum ERROR_LEVEL{
+enum LOG_LEVEL{
     ERROR = 0;
     WARNING = 1;
     INFO = 2;
