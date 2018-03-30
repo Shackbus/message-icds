@@ -1,35 +1,55 @@
-syntax = "proto2";
+syntax = "proto3";
 
 package shackbus.audio;
 
-message AudioData{
-    optional Codec codec = 1;
-    optional int32 channels = 2; // Audio channels (typically MONO 1 / Stereo 2)
-    optional int32 frame_length = 3; // Audio frame length (in bytes)
-    optional int32 sampling_rate = 4; // Audio sampling rate
-    optional int32 bit_depth = 5; // Audio bit depth (8...16 bit typically)
-    optional bytes audio_raw = 6; // Audio packets as raw byte arrays
-    repeated sint32 audio_packed = 7 [packed=true]; // audio packets as sint32
-    optional string user_id = 8;
+service Server{
+    rpc GetCapabilities(None) returns(Capabilities);
+    rpc StartStream(None) returns(Error);
+    rpc StopStream(None) returns(Error);
+    rpc Ping(PingPong) returns(PingPong);
+}
+
+message None{}
+
+message Error{
+    string error = 1;
+}
+
+message Capabilities{
+    string name = 1;
+    string rx_stream_address = 2; // where the Server publishes audio from the radio
+    string tx_stream_address = 3; // where the Server listens for audio to be transmitted on the radio
+}
+
+message PingPong{
+    int64 ping = 1; // unix timestamp
+}
+
+// Audio frame consisting of the raw audio byte array + metadata
+message Frame{
+    Codec codec = 1;
+    Channels channels = 2; // Number of channels
+    int32 frame_length = 3; // Audio frame length (in bytes)
+    int32 sampling_rate = 4; // Audio sampling rate
+    int32 bit_depth = 5; // Audio bit depth (8...16 bit typically)
+    bytes data = 6; // Audio packets as raw byte array
+    string user_id = 8;
+}
+
+enum Channels {
+    unknown = 0;
+    mono = 1;
+    stereo = 2;
 }
 
 enum Codec {
-    NONE = 0;
-    OPUS = 1;
-    PCM = 2;
+    none = 0;
+    opus = 1;
+    pcm = 2;
 }
 
-message ClientRequest{
-    optional bool audio_stream = 1;
-    optional string ping_origin = 2;
-    optional int64 ping = 3;
-}
-
-message ServerResponse{
-    optional bool online = 1;
-    optional int64 last_seen = 2; //unix timestamp
-    optional bool audio_stream = 3;
-    optional string tx_user = 4;
-    optional string ping_origin = 5;
-    optional int64 pong = 6;
+message State{
+    bool rx_on = 1;
+    bool tx_on = 2;
+    string tx_user = 3;
 }
