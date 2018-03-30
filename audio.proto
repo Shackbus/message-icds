@@ -2,40 +2,54 @@ syntax = "proto3";
 
 package shackbus.audio;
 
-message AudioData{
-    int32 channels = 1; // Audio channels (typically MONO 1 / Stereo 2)
-    int32 frame_length = 2; // Audio frame length (in bytes)
-    int32 sampling_rate = 3; // Audio sampling rate
-    int32 bitrate = 4; // Audio bit rate
-    bytes audio_raw = 7; // Audio packets
-    repeated sint32 audio_packed = 6 [packed=true]; // audio packets
-    Codec codec = 8;
+service Server{
+    rpc GetCapabilities(None) returns(Capabilities);
+    rpc StartStream(None) returns(Error);
+    rpc StopStream(None) returns(Error);
+    rpc Ping(PingPong) returns(PingPong);
+}
+
+message None{}
+
+message Error{
+    string error = 1;
+}
+
+message Capabilities{
+    string name = 1;
+    string rx_stream_address = 2; // where the Server publishes audio from the radio
+    string tx_stream_address = 3; // where the Server listens for audio to be transmitted on the radio
+}
+
+message PingPong{
+    int64 ping = 1; // unix timestamp
+}
+
+// Audio frame consisting of the raw audio byte array + metadata
+message Frame{
+    Codec codec = 1;
+    Channels channels = 2; // Number of channels
+    int32 frame_length = 3; // Audio frame length (in bytes)
+    int32 sampling_rate = 4; // Audio sampling rate
+    int32 bit_depth = 5; // Audio bit depth (8...16 bit typically)
+    bytes data = 6; // Audio packets as raw byte array
+    string user_id = 8;
+}
+
+enum Channels {
+    unknown = 0;
+    mono = 1;
+    stereo = 2;
 }
 
 enum Codec {
-    PCM = 0;
-    OPUS = 1;
+    none = 0;
+    opus = 1;
+    pcm = 2;
 }
 
-// test
-
-// message AudioRequest{
-//     optional bool on = 1;
-//     optional string user_id = 2;
-//     optional int32 play_msg = 3;
-//     optional bool cancel_play_msg = 4;
-// }
-
-// message AudioResponse{
-//     optional bool on = 1;
-//     optional STATUS status = 2;
-//     optional string tx_user = 3;
-//     repeated string connected_users = 4;
-//     optional int32 playing_msg = 5;
-//     optional bool cancel_playing_msg = 6;
-// }
-
-// message AudioRecording{
-//     optional string user_id = 1;
-//     optional bytes recording = 2;
-// }
+message State{
+    bool rx_on = 1;
+    bool tx_on = 2;
+    string tx_user = 3;
+}
