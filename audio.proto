@@ -16,6 +16,7 @@ message Capabilities{
     string name = 1;
     string rx_stream_address = 2; // where the Server publishes audio from the radio
     string tx_stream_address = 3; // where the Server listens for audio to be transmitted on the radio
+    string state_updates_address = 4; // where the Server listens for audio to be transmitted on the radio
 }
 
 message PingPong{
