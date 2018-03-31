@@ -4,6 +4,7 @@ package shackbus.audio;
 
 service Server{
     rpc GetCapabilities(None) returns(Capabilities);
+    rpc GetState(None) returns(State);
     rpc StartStream(None) returns(None);
     rpc StopStream(None) returns(None);
     rpc Ping(PingPong) returns(PingPong);
@@ -46,6 +47,5 @@ enum Codec {
 
 message State{
     bool rx_on = 1;
-    bool tx_on = 2;
     string tx_user = 3;
 }
