@@ -4,16 +4,12 @@ package shackbus.audio;
 
 service Server{
     rpc GetCapabilities(None) returns(Capabilities);
-    rpc StartStream(None) returns(Error);
-    rpc StopStream(None) returns(Error);
+    rpc StartStream(None) returns(None);
+    rpc StopStream(None) returns(None);
     rpc Ping(PingPong) returns(PingPong);
 }
 
 message None{}
-
-message Error{
-    string error = 1;
-}
 
 message Capabilities{
     string name = 1;
